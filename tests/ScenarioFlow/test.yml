@@ -28,24 +28,24 @@ config:
 scenarios:
   - name: 'Create new user and fetch the list'
     flow:
-      - log: 'starting test on {{ userId }}'
+      # - log: 'starting test on {{ userId }}'
       - post:
           name: 'Create User'
-          url: '/post'
+          url: '/posts'
           headers:
             Content-type: 'application/json; charset=UTF-8'
           json:
               title: '{{ title }}'
               body: '{{ body }}'
-              userId: '{{ userId}}'
+              userId: '{{ userId }}'
           capture:
-            - json: '$.results[0].hits[0].userId'
+            - json: '$.users'
               as: 'capture_userId'
           expect:
-            - statusCode: 200
+            - statusCode: 201
       - log:
           'assetId: {{ capture_userId }}'
-
+      
       - get:
           name: 'get users created'
           url: '/posts'
@@ -54,3 +54,4 @@ scenarios:
           expect:
             - statusCode: 200
       - think: 5
+      
