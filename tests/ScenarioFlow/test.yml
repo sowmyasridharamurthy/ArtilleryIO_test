@@ -1,0 +1,56 @@
+config:
+  target: 'https://jsonplaceholder.typicode.com'
+  phases:
+    - duration: 10
+      arrivalRate: 1
+      name: Warm up
+    - duration: 60
+      arrivalRate: 5
+      name: Warm up
+    # - duration: 120
+    #   arrivalRate: 5
+    #   rampTo: 50
+    #   name: Ramp up load
+    # - duration: 600
+    #   arrivalRate: 50
+    #   name: Sustained load
+  payload:
+    - path: 'data.csv'
+      fields:
+        - 'title'
+        - 'body'
+        - 'userId'
+  plugins:
+    metrics-by-endpoint:
+      # Group metrics by request name rather than URL:
+      useOnlyRequestNames: true
+
+scenarios:
+  - name: 'Create new user and fetch the list'
+    flow:
+      - log: 'starting test on {{ userId }}'
+      - post:
+          name: 'Create User'
+          url: '/post'
+          headers:
+            Content-type: 'application/json; charset=UTF-8'
+          json:
+              title: '{{ title }}'
+              body: '{{ body }}'
+              userId: '{{ userId}}'
+          capture:
+            - json: '$.results[0].hits[0].userId'
+              as: 'capture_userId'
+          expect:
+            - statusCode: 200
+      - log:
+          'assetId: {{ capture_userId }}'
+
+      - get:
+          name: 'get users created'
+          url: '/posts'
+          headers:
+            Content-type: 'application/json; charset=UTF-8'
+          expect:
+            - statusCode: 200
+      - think: 5
