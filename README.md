@@ -8,5 +8,5 @@ Execute npm i
 run the command  : artillery run 1.name-api/test.yml 
 
 # Generate report
-artillery run --output report.json  <filename>
-artillery report  report.json  
+- artillery run --output report.json  <filename>
+- artillery report  report.json  
