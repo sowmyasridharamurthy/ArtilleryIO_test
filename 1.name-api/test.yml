@@ -1,0 +1,41 @@
+config:
+  target: 'https://api.nationalize.io'
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: Warm up
+    # - duration: 120
+    #   arrivalRate: 5
+    #   rampTo: 50
+    #   name: Ramp up load
+    # - duration: 600
+    #   arrivalRate: 50
+    #   name: Sustained load
+  environments:
+    functional:
+      phases:
+        - duration: 1
+          arrivalCount: 1
+      plugins:
+        expect: {}
+        metrics-by-endpoint: 
+          useOnlyRequestNames: true
+  payload:
+    - path: 'data.csv'
+      fields:
+        - 'name'
+    
+scenarios:
+  - name: 'Name origin'
+    flow:
+      - log: 'starting New Virtual user {{ name }}'
+      - get:
+          name: 'Check..'
+          url: '/?name={{ name}}'
+          expect:
+            - statusCode: 200
+          capture:
+            - json: '$'
+              as: 'countries'
+      - think: 2
+      

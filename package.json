@@ -1,0 +1,18 @@
+{
+  "version": "0.0.0",
+  "scripts": {
+    "artillery": "artillery",
+    "test:users": "artillery run tests/users/test.yml",
+    "test:roles": "artillery run tests/roles/test.yml",
+    "test:style-guides": "artillery run tests/style-guides/test.yml",
+    "test:asset-upload": "artillery run tests/asset-upload/test.yml",
+    "test:embedded-links": "artillery run tests/embedded-links/test.yml",
+    "test:publishing": "artillery run tests/publishing/test.yml"
+  },
+  "devDependencies": {
+    "artillery": "^1.7.7",
+    "artillery-plugin-expect": "^1.5.0",
+    "artillery-plugin-http-file-uploads": "^0.0.0",
+    "artillery-plugin-metrics-by-endpoint": "^0.1.1"
+  }
+}
